@@ -26,7 +26,8 @@
     "jsmpeg"
   ],
   "scripts": {
-    "pretest": "chmod u+x test/rtsp-simple-server && parcel build test/react/react.html",
+    "pretest": "chmod u+x test/rtsp-simple-server",
+    "serve-react": "parcel test/react/react.html",
     "lint": "eslint --format pretty --ext .js,ts,.tsx --ignore-path .gitignore .",
     "test": "tsc && jest --runInBand",
     "build": "tsc index.js browser/index.js --declaration --allowJs --emitDeclarationOnly --resolveJsonModule",
@@ -51,11 +52,16 @@
     "express": "^4.17.1",
     "jest": "^27.3.1",
     "jest-image-snapshot": "^4.5.1",
-    "parcel-bundler": "^1.12.5",
+    "parcel": "^2.0.1",
     "puppeteer": "^11.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "typescript": "^4.4.4"
+  },
+  "targets": {
+    "main": false,
+    "types": false,
+    "browser": {}
   },
   "eslintConfig": {
     "extends": "kyle"

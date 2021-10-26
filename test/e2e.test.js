@@ -11,7 +11,7 @@ describe('end-to-end tests', () => {
   it('works from react', async () => {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
-    await page.goto('http://localhost:2000/react.html', {
+    await page.goto('http://localhost:1234', {
       waitUntil: 'networkidle2',
     });
 

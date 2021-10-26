@@ -45,6 +45,16 @@ ffmpeg2.stderr.pipe(process.stdout);
 ffmpeg2.on('error', console.error);
 ffmpeg2.on('close', process.exit);
 
+const parcelServe = spawn(
+  process.platform === 'win32' ? 'npm.cmd' : 'npm',
+  ['run', 'serve-react'],
+  { cwd: process.cwd() },
+);
+parcelServe.stdout.pipe(process.stdout);
+parcelServe.stderr.pipe(process.stdout);
+parcelServe.on('error', console.error);
+parcelServe.on('close', process.exit);
+
 const app = /** @type {import('express-ws').Application} */ (
   /** @type {unknown} */ (express())
 );
@@ -68,7 +78,6 @@ app.ws('/api/stream/:n', (ws, req) =>
 );
 
 app.use(express.static('browser'));
-app.use(express.static('dist'));
 
 app.get('/dual-stream', (_req, res) =>
   res.send(`
@@ -89,7 +98,11 @@ app.get('/dual-stream', (_req, res) =>
 );
 
 // legacy method (need to test that it still works)
-app.get('/:n', (req, res) =>
+app.get('/:n', (req, res) => {
+  if (Number.isNaN(+req.params.n)) {
+    res.status(404).send();
+    return;
+  }
   res.send(`
   <canvas></canvas>
   <pre></pre>
@@ -113,8 +126,8 @@ app.get('/:n', (req, res) =>
     });
     log("camera ${req.params.n}");
   </script>
-`),
-);
+`);
+});
 
 const server = app.listen(2000, () => console.log('ready'));
 
